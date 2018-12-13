@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        .printData {
+            margin-bottom: 20px;
+            border: 1px solid gray;
+            padding: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="printData">
+    <label>temp id:
+        <input type="text" id="tempId" value="test1"/>
+    </label>
+    <button type="button" onclick="getTemp()">活的模板</button>
+</div>
+
+<div class="printData">
+    <!--<div>-->
+        <!--<label for="imageUrl">印章图片网络地址：</label>-->
+        <!--<input id="imageUrl" placeholder="印章图片网络地址">-->
+    <!--</div>-->
+    <!--<br/>-->
+    <!--<div>-->
+        <!--<label for="imagePosition">印章位置：</label>-->
+        <!--<select id="imagePosition">-->
+            <!--<option value="lt">左上</option>-->
+            <!--<option value="lb">左下</option>-->
+            <!--<option value="rt">右上</option>-->
+            <!--<option value="rb" selected>右下</option>-->
+        <!--</select>-->
+    <!--</div>-->
+    <br/>
+    <div>
+        <label for="pageSize">纸张类型：</label>
+        <select id="pageSize">
+            <option value="A4" selected>A4</option>
+            <option value="A5">A5</option>
+        </select>
+    </div>
+    <br/>
+    <div>
+        <label for="pageSize">纸张方向：</label>
+        <select id="direction">
+            <option value="hx" selected>纵向</option>
+            <option value="zx">横向</option>
+        </select>
+    </div>
+    <br/>
+    <div>
+        <label for="original">表格计算：</label>
+        <input type="checkbox" id="original" name="original" value="calc">
+    </div>
+    <br/>
+    <button id="previewButton" type="button" onclick="preview()">预览pdf</button>
+</div>
+
+
+<script src="//cdn.bootcss.com/jquery/3.1.0/jquery.min.js"></script>
+<script src="plugin.js"></script>
+<script type="text/javascript">
+    var root = "http://localhost:8081";
+    var result = "";
+    var getTemp = function () {
+        var printTempId = $("#tempId").val();
+        $("#previewButton").attr("disabled", "disabled");
+        $.ajax({
+            method: "get",
+            url: root + "/printTemp/getSinglePrintData/" + printTempId,
+            success: function (data) {
+                // debugger
+                if(data.html) {
+                    result = data;
+                    $("#previewButton").removeAttr("disabled", "disabled");
+                }
+                console.log(result);
+            }
+        })
+    };
+
+    var preview = function () {
+        var data = {
+            htmlStr: result.html[0],
+            imgName: result.imgName,
+            imgX: result.imgX,
+            imgY: result.imgY,
+            original: $("#original:checked").val(),
+            pageSize: $("#pageSize").val(),
+            // imageUrl: $("#imageUrl").val(),
+            // imagePosition: $("#imagePosition").val(),
+            direction: $("#direction").val(),
+        };
+        console.log(data);
+        $.ajax({
+            url: root + "/file/html2pdf",
+            type: "POST",
+            data: data,
+            success: function (result) {
+                console.log(result)
+                // pdfListCache.push(result.data);
+                var downUrl = root + "/file/down?pdfName=";
+                var pdfUrl = downUrl + result.data
+                pdfShow.controlDiv(1, pdfUrl)
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

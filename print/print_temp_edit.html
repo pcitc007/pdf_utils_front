@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+    <meta charset="utf-8"/>
+    <title>打印模版信息 編輯</title>
+    <link type="text/css" rel="stylesheet" href="./tool/css/bootstrap.css"/>
+    <!--[if lte IE 6]>
+    <link rel="stylesheet" type="text/css" href="./tool/bootstrap/css/bootstrap-ie6.css">
+    <![endif]-->
+    <!--[if lte IE 7]>
+    <link rel="stylesheet" type="text/css" href="./tool/bootstrap/css/ie.css">
+    <![endif]-->
+    <script type="text/javascript" src="tool/js/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="./tool/js/lib/jquery.ui.widget.js"></script>
+    <script type="text/javascript" src="./tool/js/lib/jquery.fileupload.js"></script>
+</head>
+<body ng-app="myApp" ng-controller="myCtrl">
+<br/>
+<div class="container-fluid">
+    <ul class="nav nav-tabs">
+        <li class="">
+            <a href="./print_temp_list.html">列表</a>
+        </li>
+        <li class="active">
+            <a href="javascript:void(0);">编辑</a>
+        </li>
+    </ul>
+    <form id="baseForm" onsubmit="return beforeSubmit();" class="form-horizontal">
+        <input type="hidden" name="oldId" ng-value="entity.id"/>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th width="80">模版id:</th>
+                <td>
+                    <input type="text" name="id" ng-value="entity.id" class="form-control"/>
+                </td>
+                <th>模版名称:</th>
+                <td>
+                    <input type="text" name="name" ng-value="entity.name" class="form-control"/>
+                </td>
+                <th width="180px">其他模板标识:<br/>(#模板标识#_#模板标识#)<br/>含子模板类型</th>
+                <td>
+                    <textarea name="containSubTemp">{{entity.containSubTemp}}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <th width="80">印章上传:</th>
+                <td>
+                    <form id="baseForm1">
+                        <input id="fileupload" type="file" name="file" form="baseForm1">
+                    </form>
+                    <input id="imgName" type="text" name="imgName" ng-value="entity.imgName">
+                </td>
+                <th>位置:</th>
+                <td colspan="3">
+                    <label for="imgX">X 距离: <input id="imgX" type="number" name="imgX" ng-value="entity.imgX" class="form-control"/></label>
+                    <label for="imgY">Y 距离: <input id="imgY" type="number" name="imgY" ng-value="entity.imgY" class="form-control"/></label>
+                </td>
+            </tr>
+            <tr>
+                <th>模版内容:</th>
+                <td width="410px;" colspan="4">
+                    <textarea id="note" name="content" style="margin: 0px; width: 100%; height: 600px;">{{entity.content}}</textarea>
+                </td>
+
+                <td width="600px;">
+                    <table>
+                        <tr>
+                            <th> sql</th>
+                            <td>
+                                <div id="div_all_show">
+                                    <div ng-if="!!sqlContents" ng-repeat="o in sqlContents"
+                                         id="form_edit_model_l_{{o.ID}}">
+                                        <input type="hidden" name="sqlId" id="id_edit_model_l_{{o.ID}}"/>
+                                        <table class="table table-bordered table-striped">
+                                            <tr>
+                                                <td>
+                                                    <label style="width:auto;text-align: right;"
+                                                           class="col-sm-2 control-label">结果集类型:</label>
+                                                </td>
+                                                <td>
+                                                    <div class="form-group">
+                                                        <select name="resultDataType">
+                                                            <option value="1" ng-selected="o.RESULT_DATA_TYPE ==1">Map
+                                                            </option>
+                                                            <option value="2" ng-selected="o.RESULT_DATA_TYPE ==2">
+                                                                List
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <div class="form-group">
+                                                        <textarea placeholder="查询sql" name="sqlContent"
+                                                                  class="form-control"
+                                                                  style="margin: 0px; width: 415px; height: 73px;">{{o.CONTENT}}</textarea>
+                                                    </div>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td colspan="2" style="text-align:center">
+                                                    <input type="button"
+                                                           ng-click="delModelForm('edit_model_l_', o.ID)"
+                                                           value="删 除" class="btn"/>
+                                                    <span id="show_save_res_edit_model_l_{{o.ID}}"
+                                                          style="color: red"> </span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <input type="button" class="btn btn-success" onclick="showMoreEdit()" value="增加一个"/>
+                                <!-- all show end -->
+                            </td>
+                        </tr>
+                        <tr>
+                            <th> 数据类型</th>
+                            <td>
+                                <div id="div_all_show_datatype" style="width: 100%">
+                                    <div ng-if="sqlDatatypes != null || sqlDatatypes.length != 0"
+                                         ng-repeat="o in sqlDatatypes" id="form_edit_model_datatype_{{o.ID}}"
+                                         style="width: 100%">
+                                        <input type="hidden" name="sqlId" id="id_edit_model_datatype_{{o.ID}}"/>
+                                        <table class="table table-bordered table-striped" style="width: 100%">
+                                            <tr>
+                                                <td>
+                                                    <input ng-model="o.FIELD_NAME" type="text" name="fieldName"
+                                                           placeholder="变量名称" class="form-control"/>
+                                                </td>
+                                                <td>
+                                                    <select name="fieldType" ng-model="o.FIELD_TYPE"
+                                                            class="form-control">
+                                                        <option value="1" ng-selected="o.FIELD_TYPE == 1">金额(千分位)
+                                                        </option>
+                                                        <option value="2" ng-selected="o.FIELD_TYPE == 2">金额(大写)
+                                                        </option>
+                                                        <option value="3" ng-selected="o.FIELD_TYPE == 3">利率</option>
+                                                        <option value="4" ng-selected="o.FIELD_TYPE == 4">日期（2018-01-01）</option>
+														<option value="4" ng-selected="o.FIELD_TYPE == 5">日期（2018年01月01日）</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <textarea placeholder="数据来源" ng-model="o.FIELD_SOURCE"
+                                                              style="width: 440px;height: 75px;"
+                                                              name="fieldSource">{{o.FIELD_SOURCE}}</textarea>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center" colspan="2">
+                                                    <input type="button"
+                                                           ng-click="delModelForm('edit_model_datatype_', o.ID)"
+                                                           value="删 除" class="btn"/>&nbsp;
+                                                    <span id="show_save_res_edit_model_datatype_{{o.ID}}"
+                                                          style="color: red"> </span>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+									
+									
+								</div>
+                                <input type="button" class="btn btn-success" onclick="showMoreEditDatatype()"
+                                       value="增加一个"/>
+                                <!-- all show end -->
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" style="text-align:center">
+                    <input type="button" ng-click="save()" class="btn btn-primary" value="保存"/>
+                    <input type="button" class="btn" onclick="history.back(-1);" value="返回"/>
+                </td>
+            </tr>
+        </table>
+    </form>
+</div>
+
+<!-- sql model begin -->
+<div id="div_edit_model_l_0" style="display: none;">
+    <div id="form_edit_model_l_0">
+        <input type="hidden" name="sqlId" id="id_edit_model_l_0"/>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <th>结果集类型</th>
+                <td>
+                    <select name="resultDataType">
+                        <option value="1">Map</option>
+                        <option value="2">List</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div class="form-group">
+								<textarea placeholder="查询sql" name="sqlContent" id="name_edit_model_l_0"
+                                          class="form-control"
+                                          style="margin: 0px; width: 415px; height: 73px;"></textarea>
+                    </div>
+                </td>
+            </tr>
+
+            <tr>
+                <td colspan="2" style="text-align:center">
+                    <input type="button" onclick="delModelForm('edit_model_l_0')" value="删 除" class="btn"/>
+                    &nbsp;&nbsp;
+                    <span id="show_save_res_edit_model_l_0" style="color: red"></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- sql model end -->
+
+<!-- datatype model begin -->
+<div id="div_edit_model_datatype_0" style="display: none;">
+    <div id="form_edit_model_datatype_0">
+        <input type="hidden" name="sqlId" id="id_edit_model_datatype_0"/>
+        <table class="table table-bordered table-striped">
+            <tr>
+                <td>
+                    <input type="text" name="fieldName" placeholder="变量名称" class="form-control"/>
+                </td>
+                <td>
+                    <!-- 此处数据类型配置 固定与后台相应 -->
+                    <select name="fieldType" class="form-control">
+                        <option value="1">金额(千分位)</option>
+                        <option value="2">金额(大写)</option>
+                        <option value="3">利率</option>
+                        <option value="4">日期（2018-01-01）</option>
+                        <option value="5">日期（2018年01月01日）</option>
+                    </select>
+                </td>
+
+            </tr>
+
+            <tr>
+                <td colspan="2">
+                    <textarea placeholder="数据来源" style="width: 440px;height: 75px;" name="fieldSource"
+                              style="width: 100%;"></textarea>
+                </td>
+            </tr>
+
+            <tr>
+                <td style="text-align:center" colspan="2">
+                    <input type="button" onclick="delModelForm('edit_model_datatype_0')" value="删 除" class="btn"/>
+                    &nbsp;&nbsp;
+                    <span id="show_save_res_edit_model_datatype_0" style="color: red"></span>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+<!-- datatype model end -->
+
+<script type="text/javascript" src="tool/js/lib/bootstrap.min.js"></script>
+<script type="text/javascript" src="tool/js/lib/bootstrap-ie.js"></script>
+<script type="text/javascript" src="./tool/js/su.js"></script>
+
+<!-- editor -->
+<script type="text/javascript" charset="utf-8" src="./tool/editor/ueditor.config.js"></script>
+<script type="text/javascript" charset="utf-8" src="./tool/editor/ueditor.all.js"></script>
+<script type="text/javascript" charset="utf-8" src="tool/js/ueditor.self.btn.js"></script>
+<!--<script type="text/javascript" charset="utf-8"-->
+<!--src=./tool/editor/lang/zh-cn/zh-cn.js"></script>-->
+
+<script type="text/javascript">
+    var ue = null;
+    $(function () {
+        //编辑器
+        ue = UE.getEditor('note');
+    });
+
+    function beforeSubmit() {
+        ue.execCommand('source');//将编辑器切换到源码模式或非源码模式，与当前模式相反
+
+        // TODO 模板ID 模版名称 不能为空
+        // TODO 数据字段 的数据类型不能为空
+    }
+
+    var editIndex = 0;
+    var showMoreEdit = function () {
+        editIndex += 1;
+        var editContent = $("#div_edit_model_l_0").html().replace(/edit_model_l_0/g, "edit_model_l_" + editIndex);
+        $("#div_all_show").append(editContent);
+    };
+
+    var editIndexDatatype = 0;
+    var showMoreEditDatatype = function () {
+        editIndexDatatype += 1;
+        var editContentDatatype = $("#div_edit_model_datatype_0").html().replace(/edit_model_datatype_0/g, "edit_model_datatype_" + editIndexDatatype);
+        $("#div_all_show_datatype").append(editContentDatatype);
+    };
+
+    var delModelForm = function (partIndex) {
+        $("#form_" + partIndex).remove();
+    }
+</script>
+<script src="./tool/js/lib/angular.min.js"></script>
+<script src="./tool/js/edit.js"></script>
+
+</body>
+</html>
