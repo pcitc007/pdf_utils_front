@@ -13,6 +13,14 @@
     <script type="text/javascript" src="tool/js/lib/jquery.min.js"></script>
     <script type="text/javascript" src="./tool/js/lib/jquery.ui.widget.js"></script>
     <script type="text/javascript" src="./tool/js/lib/jquery.fileupload.js"></script>
+    <style type="text/css">
+        .selfTextarea {
+            margin: 0;
+            width: 200px;
+            height: 20px;
+        }
+
+    </style>
 </head>
 <body ng-app="myApp" ng-controller="myCtrl">
 <br/>
@@ -29,44 +37,51 @@
         <input type="hidden" name="oldId" ng-value="entity.id"/>
         <table class="table table-bordered table-striped">
             <tr>
-                <th width="80">模版id:</th>
-                <td>
+                <td  class="span2">
+                    <span>模版id:</span>
                     <input type="text" name="id" ng-value="entity.id" class="form-control"/>
-                </td>
-                <th>模版名称:</th>
-                <td>
-                    <input type="text" name="name" ng-value="entity.name" class="form-control"/>
-                </td>
-                <th width="180px">其他模板标识:<br/>(#模板标识#_#模板标识#)<br/>含子模板类型</th>
-                <td>
-                    <textarea name="containSubTemp">{{entity.containSubTemp}}</textarea>
                 </td>
             </tr>
             <tr>
-                <th width="80">印章上传:</th>
                 <td>
+                    <span>模版名称:</span>
+                    <input type="text" name="name" ng-value="entity.name" class="form-control"/>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>其他模板标识:( 多个模板示例：#模板标识#_#模板标识#。含子模板类型 )</span><br/>
+                    <textarea rows="1" name="containSubTemp">{{entity.containSubTemp}}</textarea>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <span>印章上传:</span>
                     <form id="baseForm1">
                         <input id="fileupload" type="file" name="file" form="baseForm1">
                     </form>
                     <input id="imgName" type="text" name="imgName" ng-value="entity.imgName">
                 </td>
-                <th>位置:</th>
-                <td colspan="3">
-                    <label for="imgX">X 距离: <input id="imgX" type="number" name="imgX" ng-value="entity.imgX" class="form-control"/></label>
-                    <label for="imgY">Y 距离: <input id="imgY" type="number" name="imgY" ng-value="entity.imgY" class="form-control"/></label>
+            </tr>
+            <tr>
+                <td>
+                    <span>位置:</span>
+                    X 距离: <input id="imgX" type="number" name="imgX" ng-value="entity.imgX" class="form-control"/>
+                    Y 距离: <input id="imgY" type="number" name="imgY" ng-value="entity.imgY" class="form-control"/>
                 </td>
             </tr>
             <tr>
-                <th>模版内容:</th>
-                <td width="410px;" colspan="4">
+                <td colspan="5">
+                    <span>模版内容:</span>
                     <textarea id="note" name="content" style="margin: 0px; width: 100%; height: 600px;">{{entity.content}}</textarea>
                 </td>
-
-                <td width="600px;">
+            </tr>
+            <tr>
+                <td>
                     <table>
                         <tr>
-                            <th> sql</th>
                             <td>
+                                <sapn>sql</sapn>
                                 <div id="div_all_show">
                                     <div ng-if="!!sqlContents" ng-repeat="o in sqlContents"
                                          id="form_edit_model_l_{{o.ID}}">
@@ -93,8 +108,7 @@
                                                 <td colspan="2">
                                                     <div class="form-group">
                                                         <textarea placeholder="查询sql" name="sqlContent"
-                                                                  class="form-control"
-                                                                  style="margin: 0px; width: 415px; height: 73px;">{{o.CONTENT}}</textarea>
+                                                                  class="form-control selfTextarea">{{o.CONTENT}}</textarea>
                                                     </div>
                                                 </td>
                                             </tr>
@@ -117,8 +131,8 @@
                             </td>
                         </tr>
                         <tr>
-                            <th> 数据类型</th>
                             <td>
+                                <span>数据类型</span>
                                 <div id="div_all_show_datatype" style="width: 100%">
                                     <div ng-if="sqlDatatypes != null || sqlDatatypes.length != 0"
                                          ng-repeat="o in sqlDatatypes" id="form_edit_model_datatype_{{o.ID}}"
@@ -127,8 +141,7 @@
                                         <table class="table table-bordered table-striped" style="width: 100%">
                                             <tr>
                                                 <td>
-                                                    <input ng-model="o.FIELD_NAME" type="text" name="fieldName"
-                                                           placeholder="变量名称" class="form-control"/>
+                                                    <input ng-model="o.FIELD_NAME" type="text" name="fieldName" placeholder="变量名称" class="form-control"/>
                                                 </td>
                                                 <td>
                                                     <select name="fieldType" ng-model="o.FIELD_TYPE"
@@ -138,19 +151,18 @@
                                                         <option value="2" ng-selected="o.FIELD_TYPE == 2">金额(大写)
                                                         </option>
                                                         <option value="3" ng-selected="o.FIELD_TYPE == 3">利率</option>
-                                                        <option value="4" ng-selected="o.FIELD_TYPE == 4">日期（2018-01-01）</option>
-														<option value="4" ng-selected="o.FIELD_TYPE == 5">日期（2018年01月01日）</option>
+                                                        <option value="4" ng-selected="o.FIELD_TYPE == 4">
+                                                            日期（2018-01-01）
+                                                        </option>
+                                                        <option value="4" ng-selected="o.FIELD_TYPE == 5">
+                                                            日期（2018年01月01日）
+                                                        </option>
                                                     </select>
                                                 </td>
-                                            </tr>
-                                            <tr>
                                                 <td colspan="2">
-                                                    <textarea placeholder="数据来源" ng-model="o.FIELD_SOURCE"
-                                                              style="width: 440px;height: 75px;"
+                                                    <textarea placeholder="数据来源" ng-model="o.FIELD_SOURCE" class="form-control selfTextarea"
                                                               name="fieldSource">{{o.FIELD_SOURCE}}</textarea>
                                                 </td>
-                                            </tr>
-                                            <tr>
                                                 <td style="text-align:center" colspan="2">
                                                     <input type="button"
                                                            ng-click="delModelForm('edit_model_datatype_', o.ID)"
@@ -161,9 +173,9 @@
                                             </tr>
                                         </table>
                                     </div>
-									
-									
-								</div>
+
+
+                                </div>
                                 <input type="button" class="btn btn-success" onclick="showMoreEditDatatype()"
                                        value="增加一个"/>
                                 <!-- all show end -->
@@ -188,28 +200,18 @@
         <input type="hidden" name="sqlId" id="id_edit_model_l_0"/>
         <table class="table table-bordered table-striped">
             <tr>
-                <th>结果集类型</th>
                 <td>
-                    <select name="resultDataType">
+                    <span>结果集类型</span>
+                    <select name="resultDataType" style="width: 80px;">
                         <option value="1">Map</option>
                         <option value="2">List</option>
                     </select>
                 </td>
-            </tr>
-            <tr>
-                <td colspan="2">
-                    <div class="form-group">
-								<textarea placeholder="查询sql" name="sqlContent" id="name_edit_model_l_0"
-                                          class="form-control"
-                                          style="margin: 0px; width: 415px; height: 73px;"></textarea>
-                    </div>
+                <td>
+					<textarea placeholder="查询sql" name="sqlContent" id="name_edit_model_l_0" class="form-control selfTextarea"></textarea>
                 </td>
-            </tr>
-
-            <tr>
-                <td colspan="2" style="text-align:center">
-                    <input type="button" onclick="delModelForm('edit_model_l_0')" value="删 除" class="btn"/>
-                    &nbsp;&nbsp;
+                <td style="text-align:center">
+                    <input type="button" onclick="delModelForm('edit_model_l_0')" value="删 除" class="btn btn-danger"/>
                     <span id="show_save_res_edit_model_l_0" style="color: red"></span>
                 </td>
             </tr>
@@ -237,20 +239,11 @@
                         <option value="5">日期（2018年01月01日）</option>
                     </select>
                 </td>
-
-            </tr>
-
-            <tr>
                 <td colspan="2">
-                    <textarea placeholder="数据来源" style="width: 440px;height: 75px;" name="fieldSource"
-                              style="width: 100%;"></textarea>
+                    <textarea placeholder="数据来源" name="fieldSource " class="form-control selfTextarea"></textarea>
                 </td>
-            </tr>
-
-            <tr>
                 <td style="text-align:center" colspan="2">
-                    <input type="button" onclick="delModelForm('edit_model_datatype_0')" value="删 除" class="btn"/>
-                    &nbsp;&nbsp;
+                    <input type="button" onclick="delModelForm('edit_model_datatype_0')" value="删 除" class="btn btn-danger"/>
                     <span id="show_save_res_edit_model_datatype_0" style="color: red"></span>
                 </td>
             </tr>
