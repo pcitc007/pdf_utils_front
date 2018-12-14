@@ -89,35 +89,25 @@
                                         <table class="table table-bordered table-striped">
                                             <tr>
                                                 <td>
-                                                    <label style="width:auto;text-align: right;"
-                                                           class="col-sm-2 control-label">结果集类型:</label>
+                                                    <span>结果集类型</span>
+                                                    <select name="resultDataType"  style="width: 80px;">
+                                                        <option value="1" ng-selected="o.RESULT_DATA_TYPE ==1">Map
+                                                        </option>
+                                                        <option value="2" ng-selected="o.RESULT_DATA_TYPE ==2">
+                                                            List
+                                                        </option>
+                                                    </select>
                                                 </td>
-                                                <td>
-                                                    <div class="form-group">
-                                                        <select name="resultDataType">
-                                                            <option value="1" ng-selected="o.RESULT_DATA_TYPE ==1">Map
-                                                            </option>
-                                                            <option value="2" ng-selected="o.RESULT_DATA_TYPE ==2">
-                                                                List
-                                                            </option>
-                                                        </select>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
                                                 <td colspan="2">
                                                     <div class="form-group">
                                                         <textarea placeholder="查询sql" name="sqlContent"
                                                                   class="form-control selfTextarea">{{o.CONTENT}}</textarea>
                                                     </div>
                                                 </td>
-                                            </tr>
-
-                                            <tr>
                                                 <td colspan="2" style="text-align:center">
                                                     <input type="button"
                                                            ng-click="delModelForm('edit_model_l_', o.ID)"
-                                                           value="删 除" class="btn"/>
+                                                           value="删 除" class="btn btn-danger"/>
                                                     <span id="show_save_res_edit_model_l_{{o.ID}}"
                                                           style="color: red"> </span>
                                                 </td>
@@ -166,7 +156,7 @@
                                                 <td style="text-align:center" colspan="2">
                                                     <input type="button"
                                                            ng-click="delModelForm('edit_model_datatype_', o.ID)"
-                                                           value="删 除" class="btn"/>&nbsp;
+                                                           value="删 除" class="btn btn-danger"/>&nbsp;
                                                     <span id="show_save_res_edit_model_datatype_{{o.ID}}"
                                                           style="color: red"> </span>
                                                 </td>
