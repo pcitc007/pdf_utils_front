@@ -21,9 +21,9 @@
             <table class="container">
                 <tr>
                     <th>模板ID：</th>
-                    <td><input type="text" name="id" ng-model="_page.id" value="" class="form-control"/></td>
+                    <td><input type="text" name="id" ng-model="queryId" value="" class="form-control"/></td>
                     <th>模板名称：</th>
-                    <td><input type="text" name="name" ng-model="_page.name" value="" class="form-control"/></td>
+                    <td><input type="text" name="name" ng-model="queryName" value="" class="form-control"/></td>
                 </tr>
                 <tr>
                     <td colspan="4" align="center">
@@ -134,12 +134,12 @@
             <li ng-if="_pager.pageSize > 4 && _pager.pageSize - _pager.pageNo == 1" class="active"><span>{{_pager.pageSize-1}}</span></li>
             <li ng-if="_pager.pageSize > 4 && _pager.pageSize - _pager.pageNo != 1"><a ng-click="queryList(_pager.pageSize-1)">{{_pager.pageSize-1}}</a></li>
 
-            <li ng-if="_pager.pageSize > 3 && _pager.pageSize  == _pager.pageNo" class="active"><span>${_pager.pageSize}</span></li>
+            <li ng-if="_pager.pageSize > 3 && _pager.pageSize  == _pager.pageNo" class="active"><span>{{_pager.pageSize}}</span></li>
             <li ng-if="_pager.pageSize > 3 && _pager.pageSize  != _pager.pageNo"><a ng-click="queryList(_pager.pageSize)">{{_pager.pageSize}}</a></li>
             <!-- 固定后三页end -->
 
             <!-- 后一页begin -->
-                <li ng-if="_pager.pageNo < _pager.pageSize"><a ng-click="queryList(_pager.pageSize+1)"><span>Next</span></a></li>
+                <li ng-if="_pager.pageNo < _pager.pageSize"><a ng-click="queryList(_pager.pageNo+1)"><span>Next</span></a></li>
                 <li ng-if="_pager.pageNo >= _pager.pageSize" class="disabled"><span>Next</span></li>
             <!-- 后一页end -->
 
