@@ -8,28 +8,35 @@
             text-align: center;
             margin-top: 10px;
         }
+
         .section input {
             margin-left: 5px;
             width: 70px;
         }
+        /*.section input.num {*/
+            /*width: 35px;*/
+        /*}*/
     </style>
 </head>
 <body>
 <div class="section">
-    <input type="text" id="J_width" placeholder="单元格宽度"/>
-    <span><var id="lang_tdBkColor"></var></span>
-    <input type="text" id="J_tone"/>
+    <label for="J_width">宽度：<input type="text" class="num" id="J_width" placeholder="单元格宽度"/></label>
+    <label for="J_height">高度：<input type="text" class="num" id="J_height" placeholder="单元格高度"/></label>
+    <label form="J_tone">
+        <var id="lang_tdBkColor"></var>
+        <input type="text" id="J_tone"/>
+    </label>
 
 </div>
 <script type="text/javascript">
-    var tone = $G("J_tone"), J_width = $G("J_width"),
-            colorPiker = new UE.ui.ColorPicker({
-                editor:editor
-            }),
-            colorPop = new UE.ui.Popup({
-                editor:editor,
-                content:colorPiker
-            });
+    var tone = $G("J_tone"), J_width = $G("J_width"), J_height = $G("J_height"),
+        colorPiker = new UE.ui.ColorPicker({
+            editor: editor
+        }),
+        colorPop = new UE.ui.Popup({
+            editor: editor,
+            content: colorPiker
+        });
     domUtils.on(tone, "click", function () {
         colorPop.showAnchor(tone);
     });
@@ -41,25 +48,31 @@
         colorPop.hide();
     });
     colorPiker.addListener("picknocolor", function () {
-        tone.value="";
+        tone.value = "";
         colorPop.hide();
     });
-    dialog.onok=function(){
-        editor.execCommand("edittd", tone.value, J_width.value);
+    dialog.onok = function () {
+        editor.execCommand("edittd", tone.value, J_width.value, J_height.value);
     };
     var start = editor.selection.getStart(),
         cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
 
-    if(cell){
-        var color = domUtils.getComputedStyle(cell,'background-color');
-        if(/^#/.test(color) && color !== "#EDF5FA"){
+    if (cell) {
+        var color = domUtils.getComputedStyle(cell, 'background-color');
+        if (/^#/.test(color) && color !== "#EDF5FA") {
             tone.value = color
         }
 
         var width = cell.width;
-        if(width) {
+        if (width) {
             J_width.value = width;
         }
+
+        var height = cell.height;
+        if (height) {
+            J_height.value = height;
+        }
+
     }
 
 </script>

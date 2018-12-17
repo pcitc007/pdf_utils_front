@@ -20030,7 +20030,7 @@
             queryCommandState: function () {
                 return getTableItemsByRange(this).table ? 0 : -1
             },
-            execCommand: function (cmd, bkColor, width) {
+            execCommand: function (cmd, bkColor, width, height) {
                 var me = this,
                     ut = getUETableBySelected(me);
 
@@ -20064,12 +20064,31 @@
                             }
                             return cellsArr;
                         };
-                        debugger
+                        var getRows = function (tr) {
+                            var cellsArr = [];
+                            var cells = tr.cells;
+                            for (var j = 0; j < cells.length; j++) {
+                                var cell = cells[j];
+                                if(cell.rowSpan > 1) {
+                                    continue;
+                                } else {
+                                    cellsArr.push(cell);
+                                }
+                            }
+                            return cellsArr;
+                        };
+                        //baitao 宽度设置
                         var cellIndex = cell.cellIndex;
                         var tbody = cell.parentElement.parentElement;
                         var cells = getCols(tbody, cellIndex);
                         for(var i = 0; i < cells.length; i++) {
                             cells[i].width = width;
+                        }
+                        //baitao  高度设置
+                        var tr = cell.parentElement;
+                        var rowCells = getRows(tr);
+                        for(var i = 0; i < rowCells.length; i++) {
+                            rowCells[i].height = height;
                         }
                         // cell.width = width;
                     }
