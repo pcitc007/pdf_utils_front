@@ -20052,7 +20052,7 @@
         };
 
         function selfWidthHeight(cell, width, height) {
-            if(!cell) return;
+            if (!cell) return;
             //baitao 统一设置一列宽度
             var getCols = function (table, num) {
                 num++;
@@ -20062,14 +20062,14 @@
                     var count = 0;
                     for (var j = 0; j < cells.length; j++) {
                         var cell = cells[j];
-                        if(cell.colSpan > 1) {
+                        if (cell.colSpan > 1) {
                             count += cell.colSpan;
-                            if(count >= num) {
+                            if (count >= num) {
                                 break;
                             }
                         } else {
                             count++;
-                            if(count === num) {
+                            if (count === num) {
                                 cellsArr.push(cell);
                                 break;
                             }
@@ -20083,7 +20083,7 @@
                 var cells = tr.cells;
                 for (var j = 0; j < cells.length; j++) {
                     var cell = cells[j];
-                    if(cell.rowSpan > 1) {
+                    if (cell.rowSpan > 1) {
                         continue;
                     } else {
                         cellsArr.push(cell);
@@ -20095,16 +20095,19 @@
             var cellIndex = cell.cellIndex;
             var tbody = cell.parentElement.parentElement;
             var cells = getCols(tbody, cellIndex);
-            for(var i = 0; i < cells.length; i++) {
+            for (var i = 0; i < cells.length; i++) {
+                cells[i].style.setProperty('width', width + 'px', null);
                 cells[i].width = width;
             }
             //baitao  高度设置
             var tr = cell.parentElement;
             var rowCells = getRows(tr);
-            for(var i = 0; i < rowCells.length; i++) {
+            debugger
+            for (var i = 0; i < rowCells.length; i++) {
+                rowCells[i].style.setProperty('height', height + 'px', null);
                 rowCells[i].height = height;
             }
-            // cell.width = width;
+            cell.width = width;
         }
 
         UE.commands["settablebackground"] = {
