@@ -20033,73 +20033,79 @@
             execCommand: function (cmd, bkColor, width, height) {
                 var me = this,
                     ut = getUETableBySelected(me);
+                debugger
 
                 if (!ut) {
                     var start = me.selection.getStart(),
                         cell = start && domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
                     if (cell) {
                         cell.style.backgroundColor = bkColor;
-                        //baitao 统一设置一列宽度
-                        var getCols = function (table, num) {
-                            num++;
-                            var cellsArr = [];
-                            for (var i = 0; i < table.rows.length; i++) {
-                                var cells = table.rows[i].cells;
-                                var count = 0;
-                                for (var j = 0; j < cells.length; j++) {
-                                    var cell = cells[j];
-                                    if(cell.colSpan > 1) {
-                                        count += cell.colSpan;
-                                        if(count >= num) {
-                                            break;
-                                        }
-                                    } else {
-                                        count++;
-                                        if(count === num) {
-                                            cellsArr.push(cell);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            return cellsArr;
-                        };
-                        var getRows = function (tr) {
-                            var cellsArr = [];
-                            var cells = tr.cells;
-                            for (var j = 0; j < cells.length; j++) {
-                                var cell = cells[j];
-                                if(cell.rowSpan > 1) {
-                                    continue;
-                                } else {
-                                    cellsArr.push(cell);
-                                }
-                            }
-                            return cellsArr;
-                        };
-                        //baitao 宽度设置
-                        var cellIndex = cell.cellIndex;
-                        var tbody = cell.parentElement.parentElement;
-                        var cells = getCols(tbody, cellIndex);
-                        for(var i = 0; i < cells.length; i++) {
-                            cells[i].width = width;
-                        }
-                        //baitao  高度设置
-                        var tr = cell.parentElement;
-                        var rowCells = getRows(tr);
-                        for(var i = 0; i < rowCells.length; i++) {
-                            rowCells[i].height = height;
-                        }
-                        // cell.width = width;
+                        selfWidthHeight(cell, width, height);
                     }
                 } else {
                     utils.each(ut.selectedTds, function (cell) {
                         cell.style.backgroundColor = bkColor;
-                        cell.width = width;
+                        selfWidthHeight(cell, width, height);
                     });
                 }
             }
         };
+
+        function selfWidthHeight(cell, width, height) {
+            if(!cell) return;
+            //baitao 统一设置一列宽度
+            var getCols = function (table, num) {
+                num++;
+                var cellsArr = [];
+                for (var i = 0; i < table.rows.length; i++) {
+                    var cells = table.rows[i].cells;
+                    var count = 0;
+                    for (var j = 0; j < cells.length; j++) {
+                        var cell = cells[j];
+                        if(cell.colSpan > 1) {
+                            count += cell.colSpan;
+                            if(count >= num) {
+                                break;
+                            }
+                        } else {
+                            count++;
+                            if(count === num) {
+                                cellsArr.push(cell);
+                                break;
+                            }
+                        }
+                    }
+                }
+                return cellsArr;
+            };
+            var getRows = function (tr) {
+                var cellsArr = [];
+                var cells = tr.cells;
+                for (var j = 0; j < cells.length; j++) {
+                    var cell = cells[j];
+                    if(cell.rowSpan > 1) {
+                        continue;
+                    } else {
+                        cellsArr.push(cell);
+                    }
+                }
+                return cellsArr;
+            };
+            //baitao 宽度设置
+            var cellIndex = cell.cellIndex;
+            var tbody = cell.parentElement.parentElement;
+            var cells = getCols(tbody, cellIndex);
+            for(var i = 0; i < cells.length; i++) {
+                cells[i].width = width;
+            }
+            //baitao  高度设置
+            var tr = cell.parentElement;
+            var rowCells = getRows(tr);
+            for(var i = 0; i < rowCells.length; i++) {
+                rowCells[i].height = height;
+            }
+            // cell.width = width;
+        }
 
         UE.commands["settablebackground"] = {
             queryCommandState: function () {
