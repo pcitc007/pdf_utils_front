@@ -20055,7 +20055,7 @@
             if (!cell) return;
             //baitao 统一设置一列宽度
             var getCols = function (table, num) {
-                num++;
+                num = num + 1;
                 var cellsArr = [];
                 for (var i = 0; i < table.rows.length; i++) {
                     var cells = table.rows[i].cells;
