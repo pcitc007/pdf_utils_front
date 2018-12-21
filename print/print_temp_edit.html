@@ -104,6 +104,9 @@
                                                                   class="form-control selfTextarea">{{o.CONTENT}}</textarea>
                                                     </div>
                                                 </td>
+                                                <td>
+                                                    <input placeholder="sql id" type="text" name="id" disabled="disabled" ng-value="o.ID"/>
+                                                </td>
                                                 <td colspan="2" style="text-align:center">
                                                     <input type="button"
                                                            ng-click="delModelForm('edit_model_l_', o.ID)"
@@ -199,6 +202,9 @@
                 </td>
                 <td>
 					<textarea placeholder="查询sql" name="sqlContent" id="name_edit_model_l_0" class="form-control selfTextarea"></textarea>
+                </td>
+                <td>
+                    <input placeholder="sql id" type="text" name="id" disabled="disabled" ng-value="sqlContents ? entity.id + '_' + (sqlContents.length + 1) : entity.id + '_' + 1"/>
                 </td>
                 <td style="text-align:center">
                     <input type="button" onclick="delModelForm('edit_model_l_0')" value="删 除" class="btn btn-danger"/>
