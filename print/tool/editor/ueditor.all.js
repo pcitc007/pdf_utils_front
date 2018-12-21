@@ -20041,15 +20041,40 @@
                     if (cell) {
                         cell.style.backgroundColor = bkColor;
                         selfWidthHeight(cell, width, height);
+                        setCurrentWidth(cell, width);
                     }
                 } else {
                     utils.each(ut.selectedTds, function (cell) {
+                        debugger;
                         cell.style.backgroundColor = bkColor;
                         selfWidthHeight(cell, width, height);
+                        setCurrentWidth(cell, width);
                     });
                 }
             }
         };
+
+        function setCurrentWidth(cell, width) {
+            //修改当前框框的宽度
+            var sumWidth = 0;
+            //因为宽度变化了，需要减去。
+            var changeWidth = parseInt(cell.width) - parseInt(width);
+            utils.each(cell.parentElement.cells, function(cell) {
+                sumWidth += parseInt(cell.width);
+            });
+            sumWidth -= changeWidth;
+
+            if (0 > width.indexOf('%')) {
+                width = width + '%';
+            }
+            cell.style.setProperty('width', width + '%', null);
+            cell.width = width;
+            cell.title = width + "; " + sumWidth;
+            utils.each(cell.parentElement.cells, function(cell) {
+                var title = cell.title;
+                cell.title = title.substring(0, title.indexOf(";") + 1) + sumWidth;
+            });
+        }
 
         function selfWidthHeight(cell, width, height) {
             if (!cell) return;
@@ -20092,22 +20117,21 @@
                 return cellsArr;
             };
             //baitao 宽度设置
-            var cellIndex = cell.cellIndex;
-            var tbody = cell.parentElement.parentElement;
-            var cells = getCols(tbody, cellIndex);
-            for (var i = 0; i < cells.length; i++) {
-                cells[i].style.setProperty('width', width + 'px', null);
-                cells[i].width = width;
-            }
+            // var cellIndex = cell.cellIndex;
+            // var tbody = cell.parentElement.parentElement;
+            // var cells = getCols(tbody, cellIndex);
+            // for (var i = 0; i < cells.length; i++) {
+            //     cells[i].style.setProperty('width', width + 'px', null);
+            //     cells[i].width = width;
+            // }
             //baitao  高度设置
             var tr = cell.parentElement;
             var rowCells = getRows(tr);
-            debugger
             for (var i = 0; i < rowCells.length; i++) {
                 rowCells[i].style.setProperty('height', height + 'px', null);
                 rowCells[i].height = height;
             }
-            cell.width = width;
+            // cell.width = width;
         }
 
         UE.commands["settablebackground"] = {
