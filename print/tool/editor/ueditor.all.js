@@ -20059,26 +20059,22 @@
             queryCommandState: function () {
                 return getTableItemsByRange(this).table ? 0 : -1
             },
-            execCommand: function (cmd, bkColor, width, height) {
+            execCommand: function (cmd, sqlId) {
                 var me = this,
                     ut = getUETableBySelected(me);
-                debugger
+                debugger;
 
                 if (!ut) {
                     var start = me.selection.getStart(),
                         cell = start && domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
                     if (cell) {
-                        cell.style.backgroundColor = bkColor;
-                        selfWidthHeight(cell, width, height);
-                        setCurrentWidth(cell, width);
+                        var tr = cell.parentElement;
+                        if(tr) {
+                            tr.id = sqlId;
+                        }
                     }
                 } else {
-                    utils.each(ut.selectedTds, function (cell) {
-                        debugger;
-                        cell.style.backgroundColor = bkColor;
-                        selfWidthHeight(cell, width, height);
-                        setCurrentWidth(cell, width);
-                    });
+                    //选择多个td
                 }
             }
         };

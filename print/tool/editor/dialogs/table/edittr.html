@@ -20,7 +20,7 @@
 </head>
 <body>
 <div class="section">
-    <label for="J_sqlId">宽度：<input type="text" class="num" id="J_sqlId" placeholder="单元格宽度"/></label>
+    <label for="J_sqlId">数据源：<input type="text" class="num" id="J_sqlId" placeholder="数据源id"/></label>
 </div>
 <script type="text/javascript">
     var J_sqlId = $G("J_sqlId");
@@ -29,7 +29,7 @@
     };
     var start = editor.selection.getStart(),
         cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
-debugger
+
     if (cell) {
         var id = cell.parentElement.id;
         if (id) {
