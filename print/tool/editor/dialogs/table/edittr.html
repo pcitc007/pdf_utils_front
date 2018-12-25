@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script type="text/javascript" src="../internal.js"></script>
+    <style type="text/css">
+        .section {
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .section input {
+            margin-left: 5px;
+            width: 100px;
+        }
+        /*.section input.num {*/
+            /*width: 35px;*/
+        /*}*/
+    </style>
+</head>
+<body>
+<div class="section">
+    <label for="J_sqlId">宽度：<input type="text" class="num" id="J_sqlId" placeholder="单元格宽度"/></label>
+</div>
+<script type="text/javascript">
+    var J_sqlId = $G("J_sqlId");
+    dialog.onok = function () {
+        editor.execCommand("edittr", J_sqlId.value);
+    };
+    var start = editor.selection.getStart(),
+        cell = start && domUtils.findParentByTagName(start, ["td", "th"], true);
+debugger
+    if (cell) {
+        var id = cell.parentElement.id;
+        if (id) {
+            J_sqlId.value = id;
+        }
+    }
+
+</script>
+</body>
+</html>

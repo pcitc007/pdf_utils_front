@@ -7,25 +7,41 @@
         .section {
             text-align: center;
             margin-top: 10px;
+            align-content: center;
         }
 
         .section input {
             margin-left: 5px;
             width: 70px;
         }
-        /*.section input.num {*/
-            /*width: 35px;*/
-        /*}*/
+        table{
+            margin: 0 auto;
+        }
+        td {
+            padding: 2px 0;
+        }
     </style>
 </head>
 <body>
 <div class="section">
-    <label for="J_width">宽度：<input type="text" class="num" id="J_width" placeholder="单元格宽度"/></label>
-    <label for="J_height">高度：<input type="text" class="num" id="J_height" placeholder="单元格高度"/></label>
-    <label form="J_tone">
-        <var id="lang_tdBkColor"></var>
-        <input type="text" id="J_tone"/>
-    </label>
+    <table>
+        <tr>
+            <td><label for="J_width">宽度：</label><br/></td>
+            <td><input type="text" class="num" id="J_width" placeholder="单元格宽度"/></td>
+        </tr>
+        <tr>
+            <td><label for="J_height">高度：</label></td>
+            <td><input type="text" class="num" id="J_height" placeholder="单元格高度"/></td>
+        </tr>
+        <tr>
+            <td><label form="J_tone"><var id="lang_tdBkColor"></var></label></td>
+            <td>
+                <input type="text" id="J_tone"/>
+            </td>
+        </tr>
+    </table>
+
+
 
 </div>
 <script type="text/javascript">

@@ -20054,6 +20054,35 @@
             }
         };
 
+        // tr 属性
+        UE.commands['edittr'] = {
+            queryCommandState: function () {
+                return getTableItemsByRange(this).table ? 0 : -1
+            },
+            execCommand: function (cmd, bkColor, width, height) {
+                var me = this,
+                    ut = getUETableBySelected(me);
+                debugger
+
+                if (!ut) {
+                    var start = me.selection.getStart(),
+                        cell = start && domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
+                    if (cell) {
+                        cell.style.backgroundColor = bkColor;
+                        selfWidthHeight(cell, width, height);
+                        setCurrentWidth(cell, width);
+                    }
+                } else {
+                    utils.each(ut.selectedTds, function (cell) {
+                        debugger;
+                        cell.style.backgroundColor = bkColor;
+                        selfWidthHeight(cell, width, height);
+                        setCurrentWidth(cell, width);
+                    });
+                }
+            }
+        };
+
         function setCurrentWidth(cell, width) {
             //修改当前框框的宽度
             var sumWidth = 0;
@@ -22315,6 +22344,16 @@
                             new UE.ui['edittd'](this);
                         }
                         this.getDialog('edittd').open();
+                    }
+                },
+                {
+                    label: '设置数据源',
+                    cmdName: 'edittr',
+                    exec: function () {
+                        if (UE.ui['edittr']) {
+                            new UE.ui['edittr'](this);
+                        }
+                        this.getDialog('edittr').open();
                     }
                 },
                 {
@@ -27951,6 +27990,7 @@
             'edittip': '~/dialogs/table/edittip.html',
             'edittable': '~/dialogs/table/edittable.html',
             'edittd': '~/dialogs/table/edittd.html',
+            'edittr': '~/dialogs/table/edittr.html',
             'webapp': '~/dialogs/webapp/webapp.html',
             'snapscreen': '~/dialogs/snapscreen/snapscreen.html',
             'scrawl': '~/dialogs/scrawl/scrawl.html',
@@ -28085,7 +28125,7 @@
         var dialogBtns = {
             noOk: ['searchreplace', 'help', 'spechars', 'webapp', 'preview'],
             ok: ['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
-                'insertvideo', 'insertframe', 'edittip', 'edittable', 'edittd', 'scrawl', 'template', 'music', 'background', 'charts']
+                'insertvideo', 'insertframe', 'edittip', 'edittable', 'edittd', 'edittr','scrawl', 'template', 'music', 'background', 'charts']
         };
 
         for (var p in dialogBtns) {

@@ -1447,8 +1447,15 @@ div.edui-box {
 /*edittd-dialog*/
 .edui-default .edui-for-edittd .edui-dialog-content {
     width: 240px;
+    height: 100px;
+}
+
+/*edittr-dialog*/
+.edui-default .edui-for-edittr .edui-dialog-content {
+    width: 240px;
     height: 50px;
 }
+
 /*snapscreen-dialog*/
 .edui-default .edui-for-snapscreen .edui-dialog-content {
     width: 400px;
