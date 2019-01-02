@@ -22343,7 +22343,7 @@
                     }
                 },
                 {
-                    label: '设置数据源',
+                    label: '设置当前行数据源',
                     cmdName: 'edittr',
                     exec: function () {
                         if (UE.ui['edittr']) {

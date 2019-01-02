@@ -1,40 +1,83 @@
 (function () {
     var app = angular.module('myApp', []);
     app.controller('myCtrl', function ($scope, $http, $location, $window) {
-        var root = "http://localhost:8081/printTemp";
+        // var root = "http://localhost:8081/printTemp";
+        var root = "http://localhost:8080/AtomLocal/faces/PrintTempServlet";
+        var ajax = function (url, data) {
+            return $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: url,
+                data: data
+            });
+        };
         var api = {
             queryById: function (id) {
-                var url = root + "/edit/" + id;
-                return $http.get(url);
+                var url = root + '/edit';
+                var data = {
+                    id: id
+                };
+                return ajax(url, data);
             },
             save: function (params) {
-				var data = $('#baseForm').serialize();
-				console.log(data);
-                return $.ajax({
-                    type: "POST",
-                    dataType: "json",
-                    url: root + "/save",
-                    data: $('#baseForm').serialize()
+                var url = root + "/save";
+				var data = $('#baseForm').serializeArray();
+				var json = {
+                    sqlContent: [],
+                    resultDataType: [],
+                    fieldName: [],
+                    fieldType: [],
+                    fieldSource: [],
+                };
+				$.each(data, function (idx, obj) {
+				    switch (obj.name) {
+                        case 'sqlContent':
+                            json.sqlContent.push(obj.value);break;
+                        case 'resultDataType':
+                            json.resultDataType.push(obj.value);break;
+                        case 'fieldName':
+                            json.fieldName.push(obj.value);break;
+                        case 'fieldType':
+                            json.fieldType.push(obj.value);break;
+                        case 'fieldSource':
+                            json.fieldSource.push(obj.value);break;
+                        default:
+                            json[obj.name] = obj.value;break;
+                    }
                 });
+                return ajax(url, data)
+            },
+            imgList: function () {
+                var url = root + "/imgList";
+                var data = {};
+                return ajax(url, data);
             }
         };
 
         var init = function () {
-            $scope.entity = {};
+            $scope.entity = {
+                "imgIdSeal": '',
+                "imgIdLogo": ''
+            };
             if ($location.search().id !== undefined && $location.search().id.length > 0) {
-                api.queryById($location.search().id).then(function (result) {
-                    var data = result.data;
-                    $scope.entity = data.entity;
-                    $scope.sqlContents = data.sqlContents;
-                    $scope.sqlDatatypes = data.sqlDatatypes;
+                api.queryById($location.search().id).then(function (data) {
+                    $scope.$apply(function () {
+                        $scope.entity = data.entity;
+                        $scope.sqlContents = data.sqlContents;
+                        $scope.sqlDatatypes = data.sqlDatatypes;
+                    });
                     //因为angularjs， ue 加载顺序的问题
                     $window.ue.ready(function () {
                         //设置编辑器的内容
                         $window.ue.setContent($scope.entity.content);
                     });
-
                 });
             }
+            api.imgList().then(function (data) {
+                $scope.$apply(function () {
+                    $scope.imgList = data;
+                })
+            });
         };
         init();
         var uploadUrl = "http://localhost:8081/file/upload";

@@ -37,47 +37,55 @@
         <input type="hidden" name="oldId" ng-value="entity.id"/>
         <table class="table table-bordered table-striped">
             <tr>
-                <td  class="span2">
-                    <span>模版id:</span>
-                    <input type="text" name="id" ng-value="entity.id" class="form-control"/>
-                </td>
-            </tr>
-            <tr>
                 <td>
-                    <span>模版名称:</span>
-                    <input type="text" name="name" ng-value="entity.name" class="form-control"/>
+                    <label style="padding-left: 17px;">模版id:
+                        <input type="text" name="id" ng-value="entity.id" class="form-control"/>
+                    </label>
+                    <label style="padding-left: 0px;">模版名称:
+                        <input type="text" name="name" ng-value="entity.name" class="form-control"/>
+                    </label>
+                    <label style="padding-left: 0px;">纸张类型:
+                        <select name="pageSize" ng-model="entity.pageSize" class="form-control">
+                            <option value="A4" ng-selected="entity.pageSize == A4">A4</option>
+                            <option value="A5" ng-selected="entity.pageSize == A5">A5</option>
+                        </select>
+                    </label>
+                    <label style="padding-left: 0px;">纸张方向:
+                        <input type="radio" name="pageDirection" ng-checked="entity.pageDirection == 1" value="1" class="form-control"/>横向
+                        <input type="radio" name="pageDirection" ng-checked="entity.pageDirection == 0" value="0" class="form-control"/>纵向
+                    </label>
+                    <label style="padding-left: 0px;">打印页码:
+                        <input type="radio" name="pageNumber" ng-checked="entity.pageNumber == 1" value="1" class="form-control"/>是
+                        <input type="radio" name="pageNumber" ng-checked="entity.pageNumber == 0" value="0" class="form-control"/>否
+                    </label>
+                    <label style="padding-left: 0px;">自动分页:
+                        <input type="radio" name="pageCalculation" ng-checked="entity.pageCalculation == 1" value="1" class="form-control"/>是
+                        <input type="radio" name="pageCalculation" ng-checked="entity.pageCalculation == 0" value="0" class="form-control"/>否
+                    </label>
                 </td>
-            </tr>
-            <tr>
                 <td>
-                    <span>其他模板标识:( 多个模板示例：#模板标识#_#模板标识#。含子模板类型 )</span><br/>
-                    <textarea rows="1" name="containSubTemp">{{entity.containSubTemp}}</textarea>
+                    <label style="padding-left: 0px;">印章:
+                        <select name="imgIdSeal" ng-model="entity.imgIdSeal" class="form-control">
+                            <option value="" ng-selected="!entity.imgIdSeal">无</option>
+                            <option ng-repeat="x in imgList" value="{{x.id}}" ng-selected="x.id == entity.imgIdSeal">{{x.name}}</option>
+                        </select>
+                    </label>
+                    <label style="padding-left: 0px;">logo:
+                        <select name="imgIdLogo" ng-model="entity.imgIdLogo" class="form-control">
+                            <option value="" ng-selected="!entity.imgIdLogo">无</option>
+                            <option ng-repeat="x in imgList" value="{{x.id}}" ng-selected="x.id == entity.imgIdLogo">{{x.name}}</option>
+                        </select>
+                    </label>
                 </td>
             </tr>
             <tr>
-                <td>
-                    <span>印章上传:</span>
-                    <form id="baseForm1">
-                        <input id="fileupload" type="file" name="file" form="baseForm1">
-                    </form>
-                    <input id="imgName" type="text" name="imgName" ng-value="entity.imgName">
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <span>位置:</span>
-                    X 距离: <input id="imgX" type="number" name="imgX" ng-value="entity.imgX" class="form-control"/>
-                    Y 距离: <input id="imgY" type="number" name="imgY" ng-value="entity.imgY" class="form-control"/>
-                </td>
-            </tr>
-            <tr>
-                <td colspan="5">
+                <td colspan="2">
                     <span>模版内容:</span>
                     <textarea id="note" name="content" style="margin: 0; width: 100%; height: 400px;">{{entity.content}}</textarea>
                 </td>
             </tr>
             <tr>
-                <td>
+                <td colspan="2">
                     <table>
                         <tr>
                             <td>
@@ -178,7 +186,7 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="6" style="text-align:center">
+                <td colspan="2" style="text-align:center">
                     <input type="button" ng-click="save()" class="btn btn-primary" value="保存"/>
                     <input type="button" class="btn" onclick="history.back(-1);" value="返回"/>
                 </td>

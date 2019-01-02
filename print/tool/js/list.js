@@ -1,9 +1,15 @@
 (function () {
     var app = angular.module('myApp', []);
     app.controller('myCtrl', function ($scope, $http) {
-
-
-        var root = "http://localhost:8081/printTemp";
+        var root = "http://localhost:8080/AtomLocal/faces/PrintTempServlet";
+        var ajax = function (url, data) {
+            return $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: url,
+                data: data
+            });
+        };
         var init = function() {
             $scope.queryId = "";
             $scope.queryName = "";
@@ -11,15 +17,22 @@
         init();
         var api = {
             delete: function (id) {
-                return $http.delete(root + "/" + id);
-            },
-            edit: function (id) {
-                return $
+                var url = root + '/delete';
+                var data = {
+                    id: id
+                };
+                return ajax(url, data);
             },
             queryList: function (id, name, pageNo) {
-                var url = root + "/queryList?id=" + id + "&name=" + name + "&pageNo=" + pageNo;
-                return $http.get(url);
-            }
+                var url = root + '/queryList';
+                console.log(name);
+                var data = {
+                    id: id,
+                    name: name,
+                    pageNo: pageNo,
+                };
+                return ajax(url, data);
+            },
         };
 
         $scope.commonDel = function (id) {
@@ -40,7 +53,7 @@
         $scope.edit = function (id) {
             if (confirm('确认删除?')) {
                 api.delete(id).then(function (data) {
-                    if (data === "suc") {
+                    if (data === "success") {
                         location.reload();
                     } else {
                         alert(data);
@@ -64,12 +77,13 @@
             if (pageNo === undefined) {
                 pageNo = 1
             }
-            api.queryList($scope.queryId, $scope.queryName, pageNo).then(function (result) {
-                var data = result.data;
-                $scope.list = data.list;
-                $scope._page = data._page;
-                $scope._pager = data._pager;
-                $scope._pagerUrl = data._pagerUrl;
+            api.queryList($scope.queryId, $scope.queryName, pageNo).then(function (data) {
+                $scope.$apply(function () {
+                    $scope.list = data.list;
+                    $scope._page = data._page;
+                    $scope._pager = data._pager;
+                    $scope._pagerUrl = data._pagerUrl;
+                })
             })
         };
     });
