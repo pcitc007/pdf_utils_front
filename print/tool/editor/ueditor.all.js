@@ -20071,6 +20071,7 @@
                         var tr = cell.parentElement;
                         if(tr) {
                             tr.id = sqlId;
+                            tr.title = "本行数据源是：" + sqlId;
                         }
                     }
                 } else {
