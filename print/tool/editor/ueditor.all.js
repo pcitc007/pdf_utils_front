@@ -20079,6 +20079,28 @@
                 }
             }
         };
+        // hr 插入
+        UE.commands['inserthr'] = {
+            queryCommandState: function () {
+                return getTableItemsByRange(this).table ? 0 : -1
+            },
+            execCommand: function () {
+                var me = this,
+                    ut = getUETableBySelected(me);
+                if (!ut) {
+                    var start = me.selection.getStart(),
+                        cell = start && domUtils.findParentByTagName(start, ["td", "th", "caption"], true);
+                    debugger
+                    if (cell) {
+                        cell.style.height = '2px';
+                        cell.style.padding = '0px';
+                        cell.innerHTML = '<hr style="size:2px; width:70%; margin: 0px 15%;color:#000;"/>';
+                    }
+                } else {
+                    //选择多个td
+                }
+            }
+        };
 
         function setCurrentWidth(cell, width) {
             //修改当前框框的宽度
@@ -22352,6 +22374,10 @@
                         }
                         this.getDialog('edittr').open();
                     }
+                },
+                {
+                    label: '插入横线',
+                    cmdName: 'inserthr'
                 },
                 {
                     label: lang.unlink,
@@ -28122,7 +28148,7 @@
         var dialogBtns = {
             noOk: ['searchreplace', 'help', 'spechars', 'webapp', 'preview'],
             ok: ['attachment', 'anchor', 'link', 'insertimage', 'map', 'gmap', 'insertframe', 'wordimage',
-                'insertvideo', 'insertframe', 'edittip', 'edittable', 'edittd', 'edittr','scrawl', 'template', 'music', 'background', 'charts']
+                'insertvideo', 'insertframe', 'edittip', 'edittable', 'edittd', 'edittr', 'scrawl', 'template', 'music', 'background', 'charts']
         };
 
         for (var p in dialogBtns) {
